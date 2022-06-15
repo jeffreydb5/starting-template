@@ -1,5 +1,4 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
 
 module.exports = {
@@ -14,14 +13,14 @@ module.exports = {
     assetModuleFilename: '[name][ext]'
   },
   devServer: {
+    watchFiles: ['./src/*'],
     port: 3000,
     open: true,
     hot: true
   },
   plugins: [
-    new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
-      template: './public/index.html'
+      template: './src/template.html'
     })
   ],
   module: {
@@ -32,6 +31,17 @@ module.exports = {
       },
       {
         test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-react', '@babel/preset-env'],
+            plugins: ['@babel/plugin-transform-runtime']
+          }
+        }
+      },
+      {
+        test: /\.m?jsx$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
